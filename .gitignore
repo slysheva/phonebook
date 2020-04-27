@@ -13,11 +13,8 @@ target/
 lib_managed/
 src_managed/
 project/boot/
-project/project
 project/plugins/project/
-/sbt-dist
-sbt.bat
-sbt
+
 
 # Scala-IDE specific
 .scala_dependencies
