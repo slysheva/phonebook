@@ -9,7 +9,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json._
 
 
-case class PhoneBookResource(id: String, link: String, name: String, number: String)
+case class PhoneBookResource(id: String, name: String, number: String)
 
 object PhoneBookResource {
     implicit val format: Format[PhoneBookResource] = Json.format
@@ -67,6 +67,8 @@ class PhoneBookResourceHandler @Inject()(
   }
 
   private def createPhoneBookResource(p: PhoneData): PhoneBookResource = {
-    PhoneBookResource(p.id.toString, routerProvider.get.link(p.id), p.name, p.number)
+//    PhoneBookResource(p.id.toString, routerProvider.get.link(p.id), p.name, p.number)
+    PhoneBookResource(p.id.toString, p.name, p.number)
+
   }
 }

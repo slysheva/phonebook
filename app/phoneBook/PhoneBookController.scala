@@ -75,7 +75,7 @@ class PhoneBookController @Inject()(cc: PostControllerComponents)(
 
     def success(input: PostFormInput) = {
       postResourceHandler.create(input).map { post =>
-        Created(Json.toJson(post)).withHeaders(LOCATION -> post.link)
+        Created(Json.toJson(post))
       }
     }
 
