@@ -41,6 +41,11 @@ class PhoneBookController @Inject()(cc: PostControllerComponents)(
     processJsonPost()
   }
 
+  def update(id: String): Action[AnyContent] = PostAction.async { implicit request =>
+    logger.trace("process: ")
+    processJsonPostUpdate(id)
+  }
+
   def delete(id: String): Action[AnyContent] = PostAction.async {
     implicit request =>
       logger.trace(s"delete: id = $id")
@@ -75,6 +80,21 @@ class PhoneBookController @Inject()(cc: PostControllerComponents)(
 
     def success(input: PostFormInput) = {
       postResourceHandler.create(input).map { post =>
+        Created(Json.toJson(post))
+      }
+    }
+
+    form.bindFromRequest().fold(failure, success)
+  }
+
+  private def processJsonPostUpdate[A](id: String)(
+    implicit request: PhoneBookRequest[A]): Future[Result] = {
+    def failure(badForm: Form[PostFormInput]) = {
+      Future.successful(BadRequest(badForm.errorsAsJson))
+    }
+
+    def success(input: PostFormInput) = {
+      postResourceHandler.update(id, input).map { post =>
         Created(Json.toJson(post))
       }
     }

@@ -28,6 +28,9 @@ class appRouter @Inject()(controller: PhoneBookController) extends SimpleRouter 
     case GET(p"/phone/$id") =>
       controller.show(id)
 
+    case POST(p"/phone/$id") =>
+      controller.update(id)
+
     case GET(p"/phones/searchBySubstr") =>
       controller.showFiltered()
   }

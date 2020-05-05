@@ -17,7 +17,7 @@ class PostExecutionContext @Inject()(actorSystem: ActorSystem)
 
 
 trait PhoneDataRepository {
-  def create(data: PhoneData)(implicit mc: MarkerContext): Future[String]
+  def createOrUpdate(data: PhoneData)(implicit mc: MarkerContext): Future[String]
 
   def list()(implicit mc: MarkerContext): Future[Iterable[PhoneData]]
 
@@ -64,10 +64,10 @@ class PostRepositoryInDB @Inject()()(implicit ec: PostExecutionContext)
     }
   }
 
-  override def create(data: PhoneData)(implicit mc: MarkerContext): Future[String] = {
+  override def createOrUpdate(data: PhoneData)(implicit mc: MarkerContext): Future[String] = {
     Future {
-      logger.trace(s"create: data = $data")
-      val q = phones += data
+      logger.trace(s"insert or update: data = $data")
+      val q = phones.insertOrUpdate(data)
       Await.result(db_.run(q), 5.seconds)
       data.id
     }
@@ -82,4 +82,5 @@ class PostRepositoryInDB @Inject()()(implicit ec: PostExecutionContext)
       id
     }
   }
+
 }

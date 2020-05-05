@@ -1,4 +1,4 @@
-    #Phonebook REST API
+#Phonebook REST API
 
 
 ### Running
@@ -13,7 +13,7 @@ Play will start up on the HTTP port at <http://localhost:9000/>.
 - добавить телефон (строка) и имя (строка) в справочник
  
 ```
-POST /phones/createNewPhone
+POST /phones/createNewPhone 
 ```
 
 - получить список ранее добавленных вхождений в справочник (кортеж <id, ссылка, имя, номер>) в виде json

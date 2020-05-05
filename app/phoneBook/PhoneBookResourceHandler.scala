@@ -24,7 +24,16 @@ class PhoneBookResourceHandler @Inject()(
       implicit mc: MarkerContext): Future[PhoneBookResource] = {
     val data = PhoneData(randomUUID().toString, postInput.name, postInput.phoneNumber)
 
-    phoneDataRepository.create(data).map { _ =>
+    phoneDataRepository.createOrUpdate(data).map { _ =>
+      createPhoneBookResource(data)
+    }
+  }
+
+  def update(id: String, postInput: PostFormInput)(
+    implicit mc: MarkerContext): Future[PhoneBookResource] = {
+    val data = PhoneData(id, postInput.name, postInput.phoneNumber)
+
+    phoneDataRepository.createOrUpdate(data).map { _ =>
       createPhoneBookResource(data)
     }
   }
