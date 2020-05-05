@@ -12,14 +12,19 @@ lazy val root = (project in file("."))
       "net.logstash.logback" % "logstash-logback-encoder" % "6.2",
       "io.lemonlabs" %% "scala-uri" % "1.5.1",
       "net.codingwell" %% "scala-guice" % "4.2.6",
-      "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
+      "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
+      "com.typesafe.play" %% "play-slick" % "5.0.0",
+      "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
+      "org.postgresql" % "postgresql" % "42.2.12",
+      "com.typesafe.slick" %% "slick" % "3.3.2",
     ),
     scalacOptions ++= Seq(
       "-feature",
       "-deprecation",
       "-Xfatal-warnings"
-    )
+    ),
   )
+
 
 lazy val gatlingVersion = "3.3.1"
 lazy val gatling = (project in file("gatling"))

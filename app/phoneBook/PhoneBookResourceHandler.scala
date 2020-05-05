@@ -9,7 +9,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json._
 
 
-case class PhoneBookResource(id: String, link: String, name: String, number: String)
+case class PhoneBookResource(id: String, name: String, number: String)
 
 object PhoneBookResource {
     implicit val format: Format[PhoneBookResource] = Json.format
@@ -22,7 +22,7 @@ class PhoneBookResourceHandler @Inject()(
 
   def create(postInput: PostFormInput)(
       implicit mc: MarkerContext): Future[PhoneBookResource] = {
-    val data = PhoneData(PostId(randomUUID().toString), postInput.name, postInput.phoneNumber)
+    val data = PhoneData(randomUUID().toString, postInput.name, postInput.phoneNumber)
 
     phoneDataRepository.create(data).map { _ =>
       createPhoneBookResource(data)
@@ -31,8 +31,8 @@ class PhoneBookResourceHandler @Inject()(
 
   def delete(id: String)(
     implicit mc: MarkerContext): Future[Option[PhoneBookResource]] = {
-    val postFuture = phoneDataRepository.get(PostId(id))
-    phoneDataRepository.delete(PostId(id))
+    val postFuture = phoneDataRepository.get(id)
+    phoneDataRepository.delete(id)
     postFuture.map { maybePostData =>
       maybePostData.map { postData =>
         createPhoneBookResource(postData)
@@ -42,7 +42,7 @@ class PhoneBookResourceHandler @Inject()(
 
   def lookup(id: String)(
       implicit mc: MarkerContext): Future[Option[PhoneBookResource]] = {
-    val postFuture = phoneDataRepository.get(PostId(id))
+    val postFuture = phoneDataRepository.get(id)
     postFuture.map { maybePostData =>
       maybePostData.map { postData =>
         createPhoneBookResource(postData)
@@ -67,6 +67,8 @@ class PhoneBookResourceHandler @Inject()(
   }
 
   private def createPhoneBookResource(p: PhoneData): PhoneBookResource = {
-    PhoneBookResource(p.id.toString, routerProvider.get.link(p.id), p.name, p.number)
+//    PhoneBookResource(p.id.toString, routerProvider.get.link(p.id), p.name, p.number)
+    PhoneBookResource(p.id, p.name, p.number)
+
   }
 }
