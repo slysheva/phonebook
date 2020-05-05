@@ -9,9 +9,9 @@ import play.api.routing.sird._
 class appRouter @Inject()(controller: PhoneBookController) extends SimpleRouter {
   val prefix = "/phone"
 
-  def link(id: PostId): String = {
+  def link(id: String): String = {
     import io.lemonlabs.uri.dsl._
-    val url = prefix / id.toString
+    val url = prefix / id
     url.toString()
   }
 
