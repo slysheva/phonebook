@@ -30,9 +30,9 @@ class ErrorHandler(environment: Environment,
            sourceMapper: OptionalSourceMapper,
            router: Provider[Router]) = {
     this(environment,
-         configuration,
-         sourceMapper.sourceMapper,
-         Some(router.get))
+      configuration,
+      sourceMapper.sourceMapper,
+      Some(router.get))
   }
 
   override def onClientError(request: RequestHeader,
@@ -61,15 +61,15 @@ class ErrorHandler(environment: Environment,
   }
 
   override protected def onDevServerError(
-      request: RequestHeader,
-      exception: UsefulException): Future[Result] = {
+                                           request: RequestHeader,
+                                           exception: UsefulException): Future[Result] = {
     Future.successful(
       InternalServerError(Json.obj("exception" -> exception.toString)))
   }
 
   override protected def onProdServerError(
-      request: RequestHeader,
-      exception: UsefulException): Future[Result] = {
+                                            request: RequestHeader,
+                                            exception: UsefulException): Future[Result] = {
     Future.successful(InternalServerError)
   }
 }

@@ -73,7 +73,7 @@ class PhoneBookController @Inject()(cc: PostControllerComponents)(
   }
 
   private def processJsonPost[A]()(
-      implicit request: PhoneBookRequest[A]): Future[Result] = {
+    implicit request: PhoneBookRequest[A]): Future[Result] = {
     def failure(badForm: Form[PostFormInput]) = {
       Future.successful(BadRequest(badForm.errorsAsJson))
     }

@@ -20,7 +20,7 @@ class RequestHandler @Inject()(webCommands: WebCommands,
                                       filters) {
 
   override def handlerForRequest(
-      request: RequestHeader): (RequestHeader, Handler) = {
+                                  request: RequestHeader): (RequestHeader, Handler) = {
     super.handlerForRequest {
       // ensures that REST API does not need a trailing "/"
       if (isREST(request)) {
@@ -34,7 +34,7 @@ class RequestHandler @Inject()(webCommands: WebCommands,
   private def isREST(request: RequestHeader) = {
     request.uri match {
       case uri: String if uri.contains("post") => true
-      case _                                   => false
+      case _ => false
     }
   }
 
@@ -48,8 +48,8 @@ class RequestHandler @Inject()(webCommands: WebCommands,
       } else {
         origReq.withTarget(
           RequestTarget(path = path,
-                        uriString = origReq.uri,
-                        queryString = origReq.queryString)
+            uriString = origReq.uri,
+            queryString = origReq.queryString)
         )
       }
     } else {

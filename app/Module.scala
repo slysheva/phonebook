@@ -10,6 +10,6 @@ class Module(environment: Environment, configuration: Configuration)
     with ScalaModule {
 
   override def configure(): Unit = {
-    bind[PhoneDataRepository].to[PostRepositoryInDB].in[Singleton]
+    bind[DataRepository[PhoneData]].to[CachingRepo].in[Singleton] //Caching
   }
 }

@@ -1,7 +1,11 @@
 package phoneBook
 
-import javax.inject.{Inject, Provider}
+import java.util.Calendar
+import java.sql.Time
+import java.sql.Timestamp
 
+
+import javax.inject.{Inject, Provider}
 import play.api.MarkerContext
 import java.util.UUID.randomUUID
 
@@ -18,11 +22,11 @@ object PhoneBookResource {
 
 class PhoneBookResourceHandler @Inject()(
                                      routerProvider: Provider[appRouter],
-                                     phoneDataRepository: PhoneDataRepository)(implicit ec: ExecutionContext) {
+phoneDataRepository: DataRepository[PhoneData])(implicit ec: ExecutionContext) {
 
   def create(postInput: PostFormInput)(
-      implicit mc: MarkerContext): Future[PhoneBookResource] = {
-    val data = PhoneData(randomUUID().toString, postInput.name, postInput.phoneNumber)
+    implicit mc: MarkerContext): Future[PhoneBookResource] = {
+    val data = PhoneData(randomUUID().toString, postInput.name, postInput.phoneNumber, new java.sql.Timestamp(Calendar.getInstance().getTimeInMillis))
 
     phoneDataRepository.createOrUpdate(data).map { _ =>
       createPhoneBookResource(data)
@@ -31,7 +35,7 @@ class PhoneBookResourceHandler @Inject()(
 
   def update(id: String, postInput: PostFormInput)(
     implicit mc: MarkerContext): Future[PhoneBookResource] = {
-    val data = PhoneData(id, postInput.name, postInput.phoneNumber)
+    val data = PhoneData(id, postInput.name, postInput.phoneNumber, new java.sql.Timestamp(Calendar.getInstance().getTimeInMillis))
 
     phoneDataRepository.createOrUpdate(data).map { _ =>
       createPhoneBookResource(data)
@@ -50,7 +54,7 @@ class PhoneBookResourceHandler @Inject()(
   }
 
   def lookup(id: String)(
-      implicit mc: MarkerContext): Future[Option[PhoneBookResource]] = {
+    implicit mc: MarkerContext): Future[Option[PhoneBookResource]] = {
     val postFuture = phoneDataRepository.get(id)
     postFuture.map { maybePostData =>
       maybePostData.map { postData =>
@@ -68,16 +72,15 @@ class PhoneBookResourceHandler @Inject()(
   def findBySubstring(nameSubstring: String, phoneSubstring: String)(implicit mc: MarkerContext): Future[Iterable[PhoneBookResource]] = {
     phoneDataRepository.list().map { postDataList =>
       postDataList
-          .filter(
-            phoneData => phoneData.name.toLowerCase().contains(nameSubstring.toLowerCase())
-              && phoneData.number.contains(phoneSubstring.toLowerCase()))
-          .map(postData => createPhoneBookResource(postData))
+        .filter(
+          phoneData => phoneData.name.toLowerCase().contains(nameSubstring.toLowerCase())
+            && phoneData.number.contains(phoneSubstring.toLowerCase()))
+        .map(postData => createPhoneBookResource(postData))
     }
   }
 
   private def createPhoneBookResource(p: PhoneData): PhoneBookResource = {
-//    PhoneBookResource(p.id.toString, routerProvider.get.link(p.id), p.name, p.number)
+    //    PhoneBookResource(p.id.toString, routerProvider.get.link(p.id), p.name, p.number)
     PhoneBookResource(p.id, p.name, p.number)
-
   }
 }

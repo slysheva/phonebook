@@ -64,7 +64,7 @@ class PhoneBookActionBuilder @Inject()(messagesApi: MessagesApi,
       request.method match {
         case GET | HEAD =>
           result.withHeaders("Cache-Control" -> s"max-age: 100")
-        case other =>
+        case _ =>
           result
       }
     }
